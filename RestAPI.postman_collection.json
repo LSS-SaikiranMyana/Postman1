@@ -1,0 +1,354 @@
+{
+	"info": {
+		"_postman_id": "5000047f-b567-45e3-89a4-f981caf94bec",
+		"name": "RestAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET all emp",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9782fb97-fd66-4072-8c67-8b7b0c555871",
+						"exec": [
+							"var response= JSON.parse(responseBody);\r",
+							"var d=0;\r",
+							"tests[\"Verifying ID number\"]=response.data[d].id==7;\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0e996b01-6d14-486a-9ec5-a5a968c13037",
+						"exec": [
+							"pm.sendRequest('https://postman-echo.com/time/now', function (err, res) {\r",
+							"    if (err) { console.log(err); }\r",
+							"    else {\r",
+							"        var currentTime = res.stream.toString();\r",
+							"        console.log(currentTime);\r",
+							"        pm.environment.set(\"currentTime\", currentTime);\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/users?page=2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get single emp",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "249695a7-43fa-4dff-ae1c-45536f352552",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"var i = 3;\r",
+							"var response = JSON.parse(responseBody);\r",
+							"tests[\"Verifying ID\"] = response.data.id == i;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/users/{{user_id}}",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get single emp Negative",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "14a272f1-f3a9-4fd9-8ecf-05155df10729",
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"//var response=JSON.parse(responseBody);\r",
+							"//tests[\"Verifying ID\"]=response.data.id==31;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/users/31",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users",
+						"31"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST create user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/users",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST create user(Added but not shown in list)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5ee96414-a645-40fd-9f70-1927ea981e87",
+						"exec": [
+							"tests[\"name added\"] = responseBody.has(\"Manoj\");\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Manoj\",\r\n    \"job\": \"engineer\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/users",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e609b88a-653b-4dcf-8dc0-ab671053ab07",
+						"exec": [
+							"pm.globals.set('p', \"user\")"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "bd848b1d-2732-421a-9d0d-a9a470ecf711",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/{{p}}",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"{{p}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "24c8e353-cd7e-4882-b32a-f4c4014c7b3f",
+						"exec": [
+							"tests[\"Token is matching\"] = responseBody.has(\"QpwL5tke4Pnpja7X4\");\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"eve.holt@reqres.in\",\r\n    \"password\": \"cityslicka\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/login",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://reqres.in/api/users?page=2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "df32fae1-eec8-4afc-8944-17b7917e7874",
+						"exec": [
+							"pm.test(\"Property\", function() {\r",
+							"    pm.expect({a: 1}).to.have.property('a');\r",
+							"    pm.expect([1, 2]).to.be.an('array').that.include(2);\r",
+							"    pm.expect(2).to.equal(2);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"helllo\",function(){\r",
+							"    pm.expect(function () {\r",
+							"    pm.response.to.have.status(200)\r",
+							"}).not.to.throw();\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/users?page=2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "7351a211-d8a6-4274-9d68-224aec7e78e1",
+			"key": "user_id",
+			"value": "3"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
